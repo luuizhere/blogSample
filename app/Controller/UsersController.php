@@ -23,11 +23,25 @@ class UsersController extends AppController {
 		$this->layout = 'login';
 		if($this->request->is('post')){
 			if($this->Auth->login()){
-				$this->redirect($this->Auth->redirect());
-			}else{
-				$this->Session->setFlash('Usuario ou Senha incorreta');
-			}
-		}
+			   App::import("Model", "User");  
+			  $model = new User();  	
+			  $senhaDigitada = AuthComponent::password($this->request['data']['User']['password']);
+			  $query = "SELECT password_ini from users where username = '".$this->request['data']['User']['username']."' and password = '".$senhaDigitada."'";
+			  $teste = $model->query($query);
+			  $senhaConsultada = $teste[0]['users']['password_ini'];
+			  if($senhaConsultada == 'DEFAULT'){
+				  return $this->redirect(array('action' => 'changePassword'));
+			  } 
+			  $this->redirect($this->Auth->redirect());
+		  }else{
+			  $this->Session->setFlash('Seu usuario ou senha está incorreto');
+		   }
+		  if($this->Auth->login()){
+			  $this->redirect($this->Auth->redirect());
+		  }else{
+			  $this->Session->setFlash('Seu usuario ou senha está incorreto');
+		  }
+	   }
 	}
 
 ################################################
@@ -117,5 +131,34 @@ class UsersController extends AppController {
 			$this->Session->setFlash(__('The user could not be deleted. Please, try again.'));
 		}
 		return $this->redirect(array('action' => 'index'));
+	}
+
+################################################
+		//CONTROLLER DE ALTERAR SENHA //
+################################################
+
+	public function changePassword(){	
+		$user = $this->User->find('first', array( 
+			'conditions' => array(
+				'User.id' => $this->Auth->user('id')) 
+		));
+		$id = $user['User']['id'];
+
+		if (!$this->User->exists($id)) {
+			throw new NotFoundException(__('Invalid user'));
+		}
+		if ($this->request->is(array('post', 'put'))) {
+			if ($this->User->save(array('User'=> array(
+				'id' => $id,'password'=> $this->request->data['User']['password'], 'groups_id'=> $this->request->data['User']['groups_id'], 'password_ini'=> $this->request->data['User']['password_ini']
+			)))) {
+				$this->Session->setFlash(__('The user has been saved.'));
+				return $this->redirect(array('action' => 'index'));
+			} else {
+				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
+			}
+		} else {
+			$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
+			$this->request->data = $this->User->find('first', $options);
+		}
 	}
 }

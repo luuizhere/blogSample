@@ -43,8 +43,9 @@ class PostsController extends AppController {
 		$query = "Select * from comments where posts_id = ".$id;
 		$comentario = $model->query($query);
 		$users = $this->Post->Users->find('all');
+		$categorias = $this->Post->Categorias->find('all');
 		$this->set('post', $this->Post->find('first', $options));
-		$this->set(compact('comentario','users'));
+		$this->set(compact('comentario','users','categorias'));
 	}
 
 ################################################

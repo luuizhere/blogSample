@@ -2,7 +2,7 @@
 
     <?php echo $this->Form->input('id',array('type'=>'hidden')); ?>
 
-    <?php echo $this->Form->input('password',array('type'=>'text','label'=>array('text'=>'Enter your new password'))); ?>
+    <?php echo $this->Form->input('password',array('type'=>'password','class'=>'form-control','label'=>array('text'=>'Enter your new password'))); ?>
 
 
     <?php echo $this->Form->hidden('groups_id',array(
@@ -11,6 +11,7 @@
     <?php echo $this->Form->hidden('password_ini',array(
 		'value' => 'ALTERED',
 	)); ?>
-    <button type="submit">Save</button>
+  <br>
+   <?php echo $this->Form->button('Alterar a senha',['class'=>'btn btn-primary']); ?>
 
 <?php echo $this->Form->end(); ?>

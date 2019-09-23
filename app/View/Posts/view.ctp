@@ -7,6 +7,7 @@
 
 			<dl>
 				<dd>
+					<h6><strong>Categoria: </strong><?php echo $post['Categorias']['name']; ?> </h6>
 					<?php echo h($post['Post']['body']); ?>
 					<hr>
 				</dd>
