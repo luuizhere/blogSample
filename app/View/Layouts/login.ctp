@@ -5,6 +5,8 @@
 <div class="list-group-item">
     <?php
     echo $this->Form->create();
+    echo $this->Session->flash(); 
+	echo $this->Session->flash('auth');
     echo $this->Html->image('logo.jpg',['class'=>'mb-4','alt'=>'SampleMed']);
 
     ?>

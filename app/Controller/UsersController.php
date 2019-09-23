@@ -15,6 +15,14 @@ class UsersController extends AppController {
 		$this->Auth->allow('add');
 	}
 
+	public function isAuthorized($user){
+		if(in_array($this->action, array('edit','delete'))){
+			if($user['Groups']['level'] < 3){// PRIORIDADES => 3 = ADM , 2 = POSTERS , 1 = USERS
+				return false;
+			}		
+		} 
+		return true;
+	}
 ################################################
 		//CONTROLLER DE LOGIN //
 ################################################

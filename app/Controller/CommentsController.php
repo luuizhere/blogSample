@@ -20,6 +20,14 @@ class CommentsController extends AppController {
 	}
 
 	################################################
+				//CONTROLE DE INDEX //
+	################################################
+
+	public function index(){
+		return $this->redirect(array('controller'=>'posts','action' => 'index'));
+	}
+
+	################################################
 				//CONTROLLER DE VIEW //
 	################################################
 

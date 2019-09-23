@@ -37,8 +37,8 @@
 		<?php echo $this->Html->link(
 							$this->Form->button('Criar comentario'),
 							array(
-								'controller' => 'posts', 
-								'action' => 'remove',
+								'controller' => 'comments', 
+								'action' => 'add',
 								$post['Post']['id']
 							), array('escape' => false)); ?>
 	<?php endif;?>

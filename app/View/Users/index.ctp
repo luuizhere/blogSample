@@ -11,7 +11,7 @@
 			<th><?php echo $this->Paginator->sort('Nome'); ?></th>
 			<th><?php echo $this->Paginator->sort('Email'); ?></th>
 			<th><?php echo $this->Paginator->sort('Grupos'); ?></th>
-			<?php if($logged_in) : ?>
+			<?php if($current_user['groups_id'] == 1): ?>
 				<th class="actions"><?php echo __('Actions'); ?></th>
 			<?php endif;	?>
 	</tr>
@@ -24,7 +24,7 @@
 		<td>
 			<?php echo $this->Html->link($user['Groups']['name'], array('controller' => 'groups', 'action' => 'view', $user['Groups']['id'])); ?>
 		</td>
-		<?php if($logged_in) : ?>
+		<?php if($current_user['groups_id'] == 1): ?>
 			<td class="actions">
 				<?php echo $this->Html->link(__('View'), array('action' => 'view', $user['User']['id'])); ?>
 				<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $user['User']['id'])); ?>
@@ -37,9 +37,6 @@
 	</table>
 	
 	<div class="paginas">
-
-
-
 		<nav aria-label="Page navigation">
 			<ul class="pagination">
 				<li>
@@ -54,7 +51,7 @@
 		</nav>
 	</div>
 </div>
-<?php if($logged_in) : ?>
+<?php if($current_user['groups_id'] == 1): ?>
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
