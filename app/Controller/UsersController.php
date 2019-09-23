@@ -23,15 +23,16 @@ class UsersController extends AppController {
 		$this->layout = 'login';
 		if($this->request->is('post')){
 			if($this->Auth->login()){
-			   App::import("Model", "User");  
+				// VERIFICAÇÃO SE O USUARIO ESTA COM A SENHA INICIAL
+			  App::import("Model", "User");  
 			  $model = new User();  	
 			  $senhaDigitada = AuthComponent::password($this->request['data']['User']['password']);
 			  $query = "SELECT password_ini from users where username = '".$this->request['data']['User']['username']."' and password = '".$senhaDigitada."'";
-			  $teste = $model->query($query);
-			  $senhaConsultada = $teste[0]['users']['password_ini'];
-			  if($senhaConsultada == 'DEFAULT'){
+			  $resultadoQuery = $model->query($query);							
+			  $senhaConsultada = $resultadoQuery[0]['users']['password_ini']; // DADOS DA CONSULTA DO CAMPO DA FLAG
+			  if($senhaConsultada == 'DEFAULT'){ // FOI DADO O NOME DE DEFAULT A PRIMEIRA FLAG INICIAL, CASO SEJA VDD, VAI PARA TROCA DE SENHA
 				  return $this->redirect(array('action' => 'changePassword'));
-			  } 
+			  } // FIM DA VERIFICAÇÃO 
 			  $this->redirect($this->Auth->redirect());
 		  }else{
 			  $this->Session->setFlash('Seu usuario ou senha está incorreto');
