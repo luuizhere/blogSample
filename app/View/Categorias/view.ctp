@@ -1,5 +1,5 @@
 <div class="categorias view">
-<h2><?php echo __('Categoria'); ?></h2>
+	<h2><?php echo __('Categoria'); ?></h2>
 	<dl>
 		<dt><?php echo __('Id'); ?></dt>
 		<dd>

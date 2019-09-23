@@ -1,37 +1,41 @@
 <?php
 App::uses('AppController', 'Controller');
 
-class GroupsController extends AppController {
+class GroupsController extends AppController
+{
 
 	public $components = array('Paginator');
 
-################################################
-		//CONTROLLER DE AUTORIZAÇÃO //
-################################################
+	################################################
+	//CONTROLLER DE AUTORIZAÇÃO //
+	################################################
 
-	public function isAuthorized($user){
-		if(in_array($this->action, array('edit','delete','add'))){
-			if($user['Groups']['level'] < 3){// PRIORIDADES => 3 = ADM , 2 = POSTERS , 1 = USERS
+	public function isAuthorized($user)
+	{
+		if (in_array($this->action, array('edit', 'delete', 'add'))) {
+			if ($user['Groups']['level'] < 3) { // PRIORIDADES => 3 = ADM , 2 = POSTERS , 1 = USERS
 				return false;
-			}		
-		} 
+			}
+		}
 		return true;
 	}
 
-################################################
-		//CONTROLLER DE INDEX //
-################################################
+	################################################
+	//CONTROLLER DE INDEX //
+	################################################
 
-	public function index() {
+	public function index()
+	{
 		$this->Group->recursive = 0;
 		$this->set('groups', $this->Paginator->paginate());
 	}
 
-################################################
-		//CONTROLLER DE VIEW //
-################################################
+	################################################
+	//CONTROLLER DE VIEW //
+	################################################
 
-	public function view($id = null) {
+	public function view($id = null)
+	{
 		if (!$this->Group->exists($id)) {
 			throw new NotFoundException(__('Invalid group'));
 		}
@@ -39,11 +43,12 @@ class GroupsController extends AppController {
 		$this->set('group', $this->Group->find('first', $options));
 	}
 
-################################################
-		//CONTROLLER DE CRIAÇÃO //
-################################################
+	################################################
+	//CONTROLLER DE CRIAÇÃO //
+	################################################
 
-	public function add() {
+	public function add()
+	{
 		if ($this->request->is('post')) {
 			$this->Group->create();
 			if ($this->Group->save($this->request->data)) {
@@ -55,11 +60,12 @@ class GroupsController extends AppController {
 		}
 	}
 
-################################################
-		//CONTROLLER DE EDIÇÃO //
-################################################
+	################################################
+	//CONTROLLER DE EDIÇÃO //
+	################################################
 
-	public function edit($id = null) {
+	public function edit($id = null)
+	{
 		if (!$this->Group->exists($id)) {
 			throw new NotFoundException(__('Invalid group'));
 		}
@@ -76,11 +82,12 @@ class GroupsController extends AppController {
 		}
 	}
 
-################################################
-		//CONTROLLER DE DELEÇÃO //
-################################################
-	
-	public function delete($id = null) {
+	################################################
+	//CONTROLLER DE DELEÇÃO //
+	################################################
+
+	public function delete($id = null)
+	{
 		$this->Group->id = $id;
 		if (!$this->Group->exists()) {
 			throw new NotFoundException(__('Invalid group'));

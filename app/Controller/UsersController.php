@@ -2,80 +2,87 @@
 App::uses('AppController', 'Controller');
 
 
-class UsersController extends AppController {
+class UsersController extends AppController
+{
 
 	public $name = 'Users';
 
-################################################
-		//CONTROLLER DE AUTORIZAÇÃO //
-################################################
+	################################################
+	//CONTROLLER DE AUTORIZAÇÃO //
+	################################################
 
-	public function beforeFilter(){
+	public function beforeFilter()
+	{
 		parent::beforeFilter();
 		$this->Auth->allow('add');
 	}
 
-	public function isAuthorized($user){
-		if(in_array($this->action, array('edit','delete'))){
-			if($user['Groups']['level'] < 3){// PRIORIDADES => 3 = ADM , 2 = POSTERS , 1 = USERS
+	public function isAuthorized($user)
+	{
+		if (in_array($this->action, array('edit', 'delete'))) {
+			if ($user['Groups']['level'] < 3) { // PRIORIDADES => 3 = ADM , 2 = POSTERS , 1 = USERS
 				return false;
-			}		
-		} 
+			}
+		}
 		return true;
 	}
-################################################
-		//CONTROLLER DE LOGIN //
-################################################
-	
-	public function login(){
+	################################################
+	//CONTROLLER DE LOGIN //
+	################################################
+
+	public function login()
+	{
 		$this->layout = 'login';
-		if($this->request->is('post')){
-			if($this->Auth->login()){
+		if ($this->request->is('post')) {
+			if ($this->Auth->login()) {
 				// VERIFICAÇÃO SE O USUARIO ESTA COM A SENHA INICIAL
-			  App::import("Model", "User");  
-			  $model = new User();  	
-			  $senhaDigitada = AuthComponent::password($this->request['data']['User']['password']);
-			  $query = "SELECT password_ini from users where username = '".$this->request['data']['User']['username']."' and password = '".$senhaDigitada."'";
-			  $resultadoQuery = $model->query($query);							
-			  $senhaConsultada = $resultadoQuery[0]['users']['password_ini']; // DADOS DA CONSULTA DO CAMPO DA FLAG
-			  if($senhaConsultada == 'DEFAULT'){ // FOI DADO O NOME DE DEFAULT A PRIMEIRA FLAG INICIAL, CASO SEJA VDD, VAI PARA TROCA DE SENHA
-				  return $this->redirect(array('action' => 'changePassword'));
-			  } // FIM DA VERIFICAÇÃO 
-			  $this->redirect($this->Auth->redirect());
-		  }else{
-			  $this->Session->setFlash('Seu usuario ou senha está incorreto');
-		   }
-		  if($this->Auth->login()){
-			  $this->redirect($this->Auth->redirect());
-		  }else{
-			  $this->Session->setFlash('Seu usuario ou senha está incorreto');
-		  }
-	   }
+				App::import("Model", "User");
+				$model = new User();
+				$senhaDigitada = AuthComponent::password($this->request['data']['User']['password']);
+				$query = "SELECT password_ini from users where username = '" . $this->request['data']['User']['username'] . "' and password = '" . $senhaDigitada . "'";
+				$resultadoQuery = $model->query($query);
+				$senhaConsultada = $resultadoQuery[0]['users']['password_ini']; // DADOS DA CONSULTA DO CAMPO DA FLAG
+				if ($senhaConsultada == 'DEFAULT') { // FOI DADO O NOME DE DEFAULT A PRIMEIRA FLAG INICIAL, CASO SEJA VDD, VAI PARA TROCA DE SENHA
+					return $this->redirect(array('action' => 'changePassword'));
+				} // FIM DA VERIFICAÇÃO 
+				$this->redirect($this->Auth->redirect());
+			} else {
+				$this->Session->setFlash('Seu usuario ou senha está incorreto');
+			}
+			if ($this->Auth->login()) {
+				$this->redirect($this->Auth->redirect());
+			} else {
+				$this->Session->setFlash('Seu usuario ou senha está incorreto');
+			}
+		}
 	}
 
-################################################
-		//CONTROLLER DE LOGOUT //
-################################################
+	################################################
+	//CONTROLLER DE LOGOUT //
+	################################################
 
-	public function logout(){
+	public function logout()
+	{
 		$this->redirect($this->Auth->logout());
 	}
 	public $components = array('Paginator');
 
-################################################
-		//CONTROLLER DE INDEX //
-################################################
+	################################################
+	//CONTROLLER DE INDEX //
+	################################################
 
-	public function index() {
+	public function index()
+	{
 		$this->User->recursive = 0;
 		$this->set('users', $this->Paginator->paginate());
 	}
 
-################################################
-		//CONTROLLER DE VIEW //
-################################################
-	
-	public function view($id = null) {
+	################################################
+	//CONTROLLER DE VIEW //
+	################################################
+
+	public function view($id = null)
+	{
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}
@@ -83,11 +90,12 @@ class UsersController extends AppController {
 		$this->set('user', $this->User->find('first', $options));
 	}
 
-################################################
-		//CONTROLLER DE CRIAÇÃO //
-################################################
+	################################################
+	//CONTROLLER DE CRIAÇÃO //
+	################################################
 
-	public function add() {
+	public function add()
+	{
 		if ($this->request->is('post')) {
 			$this->User->create();
 			if ($this->User->save($this->request->data)) {
@@ -101,11 +109,12 @@ class UsersController extends AppController {
 		$this->set(compact('groups'));
 	}
 
-################################################
-		//CONTROLLER DE EDIÇÃO //
-################################################
+	################################################
+	//CONTROLLER DE EDIÇÃO //
+	################################################
 
-	public function edit($id = null) {
+	public function edit($id = null)
+	{
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}
@@ -124,11 +133,12 @@ class UsersController extends AppController {
 		$this->set(compact('groups'));
 	}
 
-################################################
-		//CONTROLLER DE DELEÇÃO //
-################################################
+	################################################
+	//CONTROLLER DE DELEÇÃO //
+	################################################
 
-	public function delete($id = null) {
+	public function delete($id = null)
+	{
 		$this->User->id = $id;
 		if (!$this->User->exists()) {
 			throw new NotFoundException(__('Invalid user'));
@@ -142,14 +152,16 @@ class UsersController extends AppController {
 		return $this->redirect(array('action' => 'index'));
 	}
 
-################################################
-		//CONTROLLER DE ALTERAR SENHA //
-################################################
+	################################################
+	//CONTROLLER DE ALTERAR SENHA //
+	################################################
 
-	public function changePassword(){	
-		$user = $this->User->find('first', array( 
+	public function changePassword()
+	{
+		$user = $this->User->find('first', array(
 			'conditions' => array(
-				'User.id' => $this->Auth->user('id')) 
+				'User.id' => $this->Auth->user('id')
+			)
 		));
 		$id = $user['User']['id'];
 
@@ -157,8 +169,8 @@ class UsersController extends AppController {
 			throw new NotFoundException(__('Invalid user'));
 		}
 		if ($this->request->is(array('post', 'put'))) {
-			if ($this->User->save(array('User'=> array(
-				'id' => $id,'password'=> $this->request->data['User']['password'], 'groups_id'=> $this->request->data['User']['groups_id'], 'password_ini'=> $this->request->data['User']['password_ini']
+			if ($this->User->save(array('User' => array(
+				'id' => $id, 'password' => $this->request->data['User']['password'], 'groups_id' => $this->request->data['User']['groups_id'], 'password_ini' => $this->request->data['User']['password_ini']
 			)))) {
 				$this->Session->setFlash(__('The user has been saved.'));
 				return $this->redirect(array('action' => 'index'));

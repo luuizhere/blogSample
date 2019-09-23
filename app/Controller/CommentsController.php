@@ -1,37 +1,41 @@
 <?php
 App::uses('AppController', 'Controller');
 
-class CommentsController extends AppController {
+class CommentsController extends AppController
+{
 
 
 	public $components = array('Paginator');
 
 	################################################
-				//AUTORIZAÇÕES //
+	//AUTORIZAÇÕES //
 	################################################
 
-	public function isAuthorized($user){
-		if(in_array($this->action, array('edit','delete','add'))){
-			if(($user['Groups']['level'] <= 3)and($user['Groups']['level']> 1)){ // PRIORIDADES => 3 = ADM , 2 = POSTERS , 1 = USERS
+	public function isAuthorized($user)
+	{
+		if (in_array($this->action, array('edit', 'delete', 'add'))) {
+			if (($user['Groups']['level'] <= 3) and ($user['Groups']['level'] > 1)) { // PRIORIDADES => 3 = ADM , 2 = POSTERS , 1 = USERS
 				return false;
-			}	
-		} 
+			}
+		}
 		return true;
 	}
 
 	################################################
-				//CONTROLE DE INDEX //
+	//CONTROLE DE INDEX //
 	################################################
 
-	public function index(){
-		return $this->redirect(array('controller'=>'posts','action' => 'index'));
+	public function index()
+	{
+		return $this->redirect(array('controller' => 'posts', 'action' => 'index'));
 	}
 
 	################################################
-				//CONTROLLER DE VIEW //
+	//CONTROLLER DE VIEW //
 	################################################
 
-	public function view($id = null) {
+	public function view($id = null)
+	{
 		if (!$this->Comment->exists($id)) {
 			throw new NotFoundException(__('Invalid comment'));
 		}
@@ -40,10 +44,11 @@ class CommentsController extends AppController {
 	}
 
 	################################################
-				//CONTROLLER DE CRIAÇÃO //
+	//CONTROLLER DE CRIAÇÃO //
 	################################################
 
-	public function add($id = null) {
+	public function add($id = null)
+	{
 		if ($this->request->is('post')) {
 			$this->Comment->create();
 			if ($this->Comment->save($this->request->data)) {
@@ -54,14 +59,15 @@ class CommentsController extends AppController {
 			}
 		}
 		$posts = $this->Comment->Posts->find('list');
-		$this->set(compact('posts','id'));
+		$this->set(compact('posts', 'id'));
 	}
 
 	################################################
-				//CONTROLLER DE EDIÇÃO //
+	//CONTROLLER DE EDIÇÃO //
 	################################################
 
-	public function edit($id = null) {
+	public function edit($id = null)
+	{
 		if (!$this->Comment->exists($id)) {
 			throw new NotFoundException(__('Invalid comment'));
 		}
@@ -81,10 +87,11 @@ class CommentsController extends AppController {
 	}
 
 	################################################
-				//CONTROLLER DE DELEÇÃO //
+	//CONTROLLER DE DELEÇÃO //
 	################################################
-	
-	public function delete($id = null) {
+
+	public function delete($id = null)
+	{
 		$this->Comment->id = $id;
 		if (!$this->Comment->exists()) {
 			throw new NotFoundException(__('Invalid comment'));

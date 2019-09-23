@@ -1,38 +1,42 @@
 <?php
 App::uses('AppController', 'Controller');
 
-class CategoriasController extends AppController {
+class CategoriasController extends AppController
+{
 
 
 	public $components = array('Paginator');
 
-################################################
-		//CONTROLLER DE AUTORIZAÇÃO //
-################################################
+	################################################
+	//CONTROLLER DE AUTORIZAÇÃO //
+	################################################
 
-	public function isAuthorized($user){
-		if(in_array($this->action, array('edit','delete','add'))){
-			if($user['Groups']['level'] < 3){// PRIORIDADES => 3 = ADM , 2 = POSTERS , 1 = USERS
+	public function isAuthorized($user)
+	{
+		if (in_array($this->action, array('edit', 'delete', 'add'))) {
+			if ($user['Groups']['level'] < 3) { // PRIORIDADES => 3 = ADM , 2 = POSTERS , 1 = USERS
 				return false;
-			}		
-		} 
+			}
+		}
 		return true;
 	}
 
-################################################
-		//CONTROLLER DE INDEX //
-################################################
+	################################################
+	//CONTROLLER DE INDEX //
+	################################################
 
-	public function index() {
+	public function index()
+	{
 		$this->Categoria->recursive = 0;
 		$this->set('categorias', $this->Paginator->paginate());
 	}
 
-################################################
-		//CONTROLLER DE VIEW //
-################################################
+	################################################
+	//CONTROLLER DE VIEW //
+	################################################
 
-	public function view($id = null) {
+	public function view($id = null)
+	{
 		if (!$this->Categoria->exists($id)) {
 			throw new NotFoundException(__('Invalid categoria'));
 		}
@@ -40,11 +44,12 @@ class CategoriasController extends AppController {
 		$this->set('categoria', $this->Categoria->find('first', $options));
 	}
 
-################################################
-		//CONTROLLER DE CRIAÇÃO //
-################################################
+	################################################
+	//CONTROLLER DE CRIAÇÃO //
+	################################################
 
-	public function add() {
+	public function add()
+	{
 		if ($this->request->is('post')) {
 			$this->Categoria->create();
 			if ($this->Categoria->save($this->request->data)) {
@@ -56,11 +61,12 @@ class CategoriasController extends AppController {
 		}
 	}
 
-################################################
-			//CONTROLLER DE EDIÇÃO //
-################################################
+	################################################
+	//CONTROLLER DE EDIÇÃO //
+	################################################
 
-	public function edit($id = null) {
+	public function edit($id = null)
+	{
 		if (!$this->Categoria->exists($id)) {
 			throw new NotFoundException(__('Invalid categoria'));
 		}
@@ -77,11 +83,12 @@ class CategoriasController extends AppController {
 		}
 	}
 
-################################################
-			//CONTROLLER DE DELEÇÃO //
-################################################
+	################################################
+	//CONTROLLER DE DELEÇÃO //
+	################################################
 
-	public function delete($id = null) {
+	public function delete($id = null)
+	{
 		$this->Categoria->id = $id;
 		if (!$this->Categoria->exists()) {
 			throw new NotFoundException(__('Invalid categoria'));
