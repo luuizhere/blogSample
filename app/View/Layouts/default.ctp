@@ -9,8 +9,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 <head>
 	<?php echo $this->Html->charset(); ?>
 	<title>
-		<?php echo $cakeDescription ?>:
-		<?php echo $this->fetch('title'); ?>
+
+		Blog SampleMed - CakePHP 2.X
 	</title>
 	<?php
 	echo $this->Html->meta('icon');

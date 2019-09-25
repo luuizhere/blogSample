@@ -1,3 +1,7 @@
+<title>
+
+Login - Blog SampleMed - CakePHP 2.X
+</title>
 <?php
 echo $this->Html->css('signin');
 echo $this->Html->css('bootstrap');
