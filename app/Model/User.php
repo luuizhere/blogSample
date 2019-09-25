@@ -40,7 +40,11 @@ class User extends AppModel {
 			'8 digitos' => array(
 				'rule' => array('minLength', '8'),
 				'message' => 'Mínimo de 8 caracteres'
-			)	
+			),	
+			'1 Letra Maiuscula e digitos' => array(
+				'rule' => array('custom', '/^(?=.*[a-z])(?=.*[$\\@\\\#%\^\&\*\(\)\[\]\+\_\{\}\`\~\=\|])(?=.*[A-Z])(?=.*[0-9])[\w$@]{8,}$/'),
+				'message' => 'A senha deve conter 1 Letra maiuscula e um caracter especial '
+			),
 		),	
 		'status' => array(
 			'Coloque o status' => array(
